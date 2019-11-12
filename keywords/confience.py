@@ -1,4 +1,8 @@
-employment_keywords = (
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+
+space = ' '
+employment_keywords = [
     'salary',
     'advice',
     'payslip',
@@ -7,8 +11,13 @@ employment_keywords = (
     'employment',
     'hours',
     'employee',
-    'earnings')
+    'earnings']
     
 def calculate_confidence_employment(input_list : list):
-    words = [paragraph.split() for paragraph in input_list]
-    return len(words)
+    words = space.join(input_list)
+    final_ratio = 0
+    for keyword in employment_keywords:
+        ratio = fuzz.partial_ratio(words, keyword)
+        if ratio > 50:
+            final_ratio += 1
+    return final_ratio
