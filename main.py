@@ -1,7 +1,6 @@
 
 import io
 import os
-import json
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -34,37 +33,29 @@ def annotate():
 
     return response
 
-def report(annotations):
-    """Prints detected features in the provided web annotations."""
-    if annotations.pages_with_matching_images:
-        print('\n{} Pages with matching images retrieved'.format(
-            len(annotations.pages_with_matching_images)))
 
-        for page in annotations.pages_with_matching_images:
-            print('Url   : {}'.format(page.url))
+def get_web_entities(annotations):
+    """Returns detected features in the provided web annotations."""
+    return annotations.web_entities
 
-    if annotations.full_matching_images:
-        print('\n{} Full Matches found: '.format(
-              len(annotations.full_matching_images)))
 
-        for image in annotations.full_matching_images:
-            print('Url  : {}'.format(image.url))
+def get_document_text(annotations):
+    return annotations.text
 
-    if annotations.partial_matching_images:
-        print('\n{} Partial Matches found: '.format(
-              len(annotations.partial_matching_images)))
-
-        for image in annotations.partial_matching_images:
-            print('Url  : {}'.format(image.url))
-
-    if annotations.web_entities:
-        print('\n{} Web entities found: '.format(
-              len(annotations.web_entities)))
-
-        for entity in annotations.web_entities:
-            print('Score      : {}'.format(entity.score))
-            print('Description: {}'.format(entity.description))
 
 if __name__ == '__main__':
     print("Smart Document Verification\n")
-    report(annotate().web_detection)
+
+    annotations = annotate()
+
+    web_entities = get_web_entities(annotations.web_detection)
+    if web_entities:
+        print('\n{} Web entities found: '.format(
+              len(web_entities)))
+
+        for entity in web_entities:
+            print('Score      : {}'.format(entity.score))
+            print('Description: {}'.format(entity.description))
+
+    text = get_document_text(annotations.full_text_annotation)
+    print("\nText found :\n {}".format(text))
