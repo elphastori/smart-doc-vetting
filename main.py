@@ -2,25 +2,38 @@
 import io
 import os
 
-from dotenv import load_dotenv
-load_dotenv()
-
 # Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
 
-def annotate():
+from pdf2image import convert_from_path
+
+from dotenv import load_dotenv
+load_dotenv()
+
+def get_image(file_name):
+    file_path = os.path.abspath(file_name)
+
+    if not file_name.lower().endswith('.pdf'):
+        # Loads the image into memory
+        with io.open(file_path, 'rb') as image_file:
+            return image_file.read()
+    
+    # convert pdf to image
+    first_page = convert_from_path(file_path, 500, single_file=True)[0]
+
+    image_data = io.BytesIO()
+    first_page.save(image_data, format='PNG')
+
+    image_data.seek(0)
+    return image_data.read()
+
+
+def annotate(file_name):
     # Instantiates a client
     client = vision.ImageAnnotatorClient()
 
-    # The name of the image file to annotate
-    file_name = os.path.abspath('IdDocument-2019-11-12-17.21.png.Png')
-
-    # Loads the image into memory
-    with io.open(file_name, 'rb') as image_file:
-        content = image_file.read()
-
-    image = types.Image(content=content)
+    image = types.Image(content=get_image(file_name))
 
     # Performs label detection on the image file
     response = client.annotate_image({
@@ -46,7 +59,7 @@ def get_document_text(annotations):
 if __name__ == '__main__':
     print("Smart Document Verification\n")
 
-    annotations = annotate()
+    annotations = annotate('BankStatement-2019-11-11-09.28.pdf')
 
     web_entities = get_web_entities(annotations.web_detection)
     if web_entities:
