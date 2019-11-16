@@ -35,7 +35,7 @@ def get_image(file_name):
 def annotate_pdf(file_name):
     # Instantiates a client
     client = vision.ImageAnnotatorClient()
-    feature = vision.types.Feature(type=vision.enums.Feature.Type.DOCUMENT_TEXT_DETECTION)
+    #feature = vision.types.Feature(type=vision.enums.Feature.Type.DOCUMENT_TEXT_DETECTION)
     # https://cloud.google.com/vision/docs/pdf#vision_text_detection_pdf_gcs-python
     image = types.Image(content=get_image(file_name))
 
@@ -43,9 +43,9 @@ def annotate_pdf(file_name):
     response = client.annotate_image({
     'image': image,
     'features': [
-        {'type': vision.enums.Feature.Type.TEXT_DETECTION},
-        {'type': vision.enums.Feature.Type.WEB_DETECTION}
-        ],
+            {'type': vision.enums.Feature.Type.TEXT_DETECTION},
+            {'type': vision.enums.Feature.Type.WEB_DETECTION}
+        ]
     })
 
     return response
@@ -60,9 +60,9 @@ def annotate(file_name):
     response = client.annotate_image({
     'image': image,
     'features': [
-        {'type': vision.enums.Feature.Type.TEXT_DETECTION},
-        {'type': vision.enums.Feature.Type.WEB_DETECTION}
-        ],
+            {'type': vision.enums.Feature.Type.TEXT_DETECTION},
+            {'type': vision.enums.Feature.Type.WEB_DETECTION}
+        ]
     })
 
     return response
@@ -80,28 +80,17 @@ def get_document_text(annotations):
 if __name__ == '__main__':
     print("Smart Document Verification\n")
 
-    annotations = annotate('BankStatement-2019-11-11-09.28.pdf')
+    annotations = annotate('docs/ResidenceDocument-2019-11-11-09.38.pdf')
 
-    web_entities = get_web_entities(annotations.web_detection)
+    web_entities_data = get_web_entities(annotations.web_detection)
 
-    ddd = []
+    web_entities = []
 
-    if web_entities:
-
-        # ddd = map(lambda x : WebEntity(x.score, x.description), web_entities)
-        ddd = [WebEntity(web_entity.description, web_entity.score) for web_entity in web_entities]
-        # print('\n{} Web entities found: '.format(
-        #       len(web_entities)))
-
-        # for entity in web_entities:
-        #     print('Score      : {}'.format(entity.score))
-        #     print('Description: {}'.format(entity.description))
-
-
+    if web_entities_data:
+        web_entities = [WebEntity(web_entity.description, web_entity.score) for web_entity in web_entities_data]
 
     text = get_document_text(annotations.full_text_annotation)
 
-    good_stuff = Vision(ddd, text)
-    # print("\nText found :\n {}".format(text))
-    print(json.dumps(dict(web_entities = [dict(description = web_entity.description, score = web_entity.score) for web_entity in good_stuff.web_entities], text = good_stuff.text)))
+    doc = Vision(web_entities, text)
+    print(json.dumps(doc.serialize()))
 
