@@ -3,6 +3,8 @@
         "-v",
         "-s",
         "./keywords",
+        "-p",
+        "test_*.py"
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
