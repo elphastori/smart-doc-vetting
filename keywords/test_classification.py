@@ -1,6 +1,8 @@
 from models import Vision
 from models import WebEntity
 
+import operator
+
 from data_bank import bank
 
 import unittest
@@ -10,7 +12,7 @@ class TestBankKeyword(unittest.TestCase):
 
     def test_matches(self):
 
-        expected = 
+        expected = "bank"
 
         id_words = [web_entity.description for web_entity in bank.web_entities]
         id_confidence = calculate_confidence_id(id_words)
@@ -23,9 +25,14 @@ class TestBankKeyword(unittest.TestCase):
 
         scores = dict(id = id_confidence, bank = bank_confidence, employment = employment_confidence)
 
-        valid_scores = score for score in 
+        valid_scores = dict(filter(lambda x : x[1] != 0, scores.items()))
 
-        self.assertGreaterEqual(confidence, 0.5)
+        sorted_x = sorted(valid_scores.items(), key=lambda kv: kv[1], reverse=True)
+
+        first = sorted_x[0][0]
+        # second = sorted_x[1][0]
+
+        self.assertEqual(expected, first)
 
 if __name__ == '__main__':
     unittest.main()
