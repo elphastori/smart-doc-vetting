@@ -1,5 +1,5 @@
 import unittest
-from confience import calculate_confidence_employment, calculate_confidence_id
+from confidence import calculate_confidence_employment, calculate_confidence_id
 
 class TestEmploymentKeywords(unittest.TestCase):
 

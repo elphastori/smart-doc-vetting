@@ -1,6 +1,10 @@
 
 import io
 import os
+import json
+
+from models import Vision
+from models import WebEntity
 
 # Imports the Google Cloud client library
 from google.cloud import vision
@@ -79,13 +83,25 @@ if __name__ == '__main__':
     annotations = annotate('BankStatement-2019-11-11-09.28.pdf')
 
     web_entities = get_web_entities(annotations.web_detection)
-    if web_entities:
-        print('\n{} Web entities found: '.format(
-              len(web_entities)))
 
-        for entity in web_entities:
-            print('Score      : {}'.format(entity.score))
-            print('Description: {}'.format(entity.description))
+    ddd = []
+
+    if web_entities:
+
+        # ddd = map(lambda x : WebEntity(x.score, x.description), web_entities)
+        ddd = [WebEntity(web_entity.description, web_entity.score) for web_entity in web_entities]
+        # print('\n{} Web entities found: '.format(
+        #       len(web_entities)))
+
+        # for entity in web_entities:
+        #     print('Score      : {}'.format(entity.score))
+        #     print('Description: {}'.format(entity.description))
+
+
 
     text = get_document_text(annotations.full_text_annotation)
-    print("\nText found :\n {}".format(text))
+
+    good_stuff = Vision(ddd, text)
+    # print("\nText found :\n {}".format(text))
+    print(json.dumps(dict(web_entities = [dict(description = web_entity.description, score = web_entity.score) for web_entity in good_stuff.web_entities], text = good_stuff.text)))
+
