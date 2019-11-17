@@ -80,7 +80,7 @@ def get_document_text(annotations):
 if __name__ == '__main__':
     print("Smart Document Verification\n")
 
-    annotations = annotate('docs/ResidenceDocument-2019-11-11-09.38.pdf')
+    annotations = annotate('docs/Passport-2019-11-12-13.02.jpeg.Jpeg')
 
     web_entities_data = get_web_entities(annotations.web_detection)
 
