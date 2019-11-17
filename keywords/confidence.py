@@ -12,41 +12,43 @@ _EMPLOYMENT_KEYWORDS = [
     'employment',
     'hours',
     'employee',
-    'earnings']
-
-# _BANK_EXHAUSTIVE_KEYWORDS = [
-#     'Received',
-#     'Verify',
-#     'Statement',
-#     'reference',
-#     'Refunds',
-#     'Adjustments',
-#     'Transfers',
-#     'Number',
-#     'Inter-Account',
-#     'FNB',
-#     'Overdraft',
-#     'Dr',
-#     'Deposits',
-#     'Cr',
-#     'Overdraft',
-#     'Payments',
-#     'Withdrawals',
-#     'Interest',
-#     'Fees',
-#     'F.N.B.',
-#     'Corporation'
-# ]
+    'earnings',
+    'resources'
+]
 
 _BANK_KEYWORDS = [
-    'bank'
+    'bank',
+    'Received',
+    'Statement',
+    'reference',
+    'Refunds',
+    'Adjustments',
+    'Transfers',
+    'Inter-Account',
+    'FNB',
+    'Overdraft',
+    'Dr',
+    'Deposits',
+    'Cr',
+    'Overdraft',
+    'Payments',
+    'Withdrawals',
+    'Interest',
+    'Fees',
+    'F.N.B.',
+    'Corporation'
 ]
 
 _ID_KEYWORDS = [
     'rsa',
     'country',
     'id',
-    'home affairs']
+    'identity',
+    'home affairs'
+]
+
+_RESIDENCE_KEYWORDS = [
+]
 
 def calculate_confidence_employment(input_list : list):
     return _calc_confidence(_EMPLOYMENT_KEYWORDS, input_list)
@@ -62,6 +64,6 @@ def _calc_confidence(key_words_list : list, input_list: list):
     final_ratio = 0
     for keyword in key_words_list:
         ratio = fuzz.partial_ratio(words, keyword)
-        if ratio > 50:
+        if ratio > 75:
             final_ratio += 1
     return final_ratio
