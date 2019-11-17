@@ -11,14 +11,11 @@ from keywords.classification import get_classification
 app = Flask(__name__)
 CORS(app)
 
-from models import Vision
-from models import WebEntity
-
 # Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
 
-from pdf2image import convert_from_bytes
+from pdf2image import convert_from_bytes, convert_from_path
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -26,6 +23,7 @@ load_dotenv()
 def pdf_to_image(data):
 
     first_page = convert_from_bytes(data, 500, single_file=True)[0]
+    # first_page = convert_from_path('docs/EmploymentDocument-2019-11-11-09.29.pdf', 500, single_file=True)[0]
 
     image_data = io.BytesIO()
     first_page.save(image_data, format='PNG')
