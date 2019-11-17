@@ -1,4 +1,4 @@
-from confidence import calculate_confidence_id, calculate_confidence_bank, calculate_confidence_employment
+from .confidence import calculate_confidence_id, calculate_confidence_bank, calculate_confidence_employment
 
 def get_confidences(words):
 
