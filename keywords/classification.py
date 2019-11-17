@@ -11,23 +11,23 @@ def get_confidences(words):
 
 def get_classification(web_words, text_words):
 
-    sorted_x = get_confidences(web_words)
+    web_class = get_confidences(web_words)
 
-    if (len(sorted_x) == 0):
+    if (len(web_class) == 0):
 
-        web_sorted_x = get_confidences(text_words)
-        if (len(web_sorted_x) == 0):
+        text_class = get_confidences(text_words)
+        if (len(text_class) == 0):
             return ""
-        return web_sorted_x[0][0]
+        return text_class[0][0]
 
-    xxx = sorted_x[0]
+    web_result = web_class[0]
 
-    if (xxx[1] > 1):
-        return xxx[0]
+    if (web_result[1] > 1):
+        return web_result[0]
 
-    web_sorted_x = get_confidences(text_words)
+    text_class = get_confidences(text_words)
 
-    if (len(web_sorted_x) == 0):
-        return xxx[0]
+    if (len(text_class) == 0):
+        return web_result[0]
 
-    return web_sorted_x[0][0]
+    return text_class[0][0]
