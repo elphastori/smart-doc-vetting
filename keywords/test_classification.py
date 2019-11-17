@@ -17,9 +17,9 @@ class TestIdKeyword(unittest.TestCase):
 
         expected = "id_result"
 
-        id_words = [web_entity.description for web_entity in id_result.web_entities]
-
-        doc_type = get_classification(id_words)
+        web_words = [web_entity.description for web_entity in id_result.web_entities]
+        text_words = id_result.text.replace("\n", " ").split()
+        doc_type = get_classification(web_words, text_words)
 
         self.assertEqual(expected, doc_type)
 
@@ -29,9 +29,9 @@ class TestBankKeyword(unittest.TestCase):
 
         expected = "bank"
 
-        bank_words = [web_entity.description for web_entity in bank.web_entities]
-
-        doc_type = get_classification(bank_words)
+        web_words = [web_entity.description for web_entity in bank.web_entities]
+        text_words = bank.text.replace("\n", " ").split()
+        doc_type = get_classification(web_words, text_words)
 
         self.assertEqual(expected, doc_type)
 
@@ -41,9 +41,9 @@ class TestEmploymentKeyword(unittest.TestCase):
 
         expected = "employment"
 
-        employment_words = [web_entity.description for web_entity in employment.web_entities]
-
-        doc_type = get_classification(employment_words)
+        web_words = [web_entity.description for web_entity in employment.web_entities]
+        text_words = employment.text.replace("\n", " ").split()
+        doc_type = get_classification(web_words, text_words)
 
         self.assertEqual(expected, doc_type)
 
